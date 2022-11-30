@@ -1,6 +1,59 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+#drinkContainer {
+    margin-bottom: 10%;
+}
+
+#drinkImage {
+    width: 90%;
+    height: 90%;
+    display: block;
+    margin: 0 auto;
+}
+
+#drinkTitle {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 20px;
+}
+
+#drinkPrice {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 16px;
+    color: grey;
+}
+
+#drinkQuantity {
+    width: 45%;
+    display: inline;
+    text-align: center;
+    border-top: thin;
+    border-top-style: dotted;
+    border-bottom: thin;
+    border-bottom-style: dotted;
+    border-right: hidden;
+    border-left: hidden;
+}
+
+#cartButton {
+    width: 45%;
+    display: inline;
+    border-top: thin;
+    border-top-style: dotted;
+    border-bottom: thin;
+    border-bottom-style: dotted;
+    border-right: hidden;
+    border-left: hidden;
+    background-color: white;
+}
+
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;

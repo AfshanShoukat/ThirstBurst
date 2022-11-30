@@ -1,0 +1,15 @@
+﻿@model IEnumerable<ThirstBurst.Models.Drink>
+
+@{
+    ViewData["Title"] = "DrinkList";
+}
+@foreach (var item in Model)
+{      
+    <div id="drinkContainer" class="col-lg-3 col-md-4 col-sm-12" >
+            <img id="drinkImage" src="@item.Image_url" alt="@item.Name" />
+            <span id="drinkTitle">@item.Name</span>
+            <span id="drinkPrice">Rs. Coming Soon</span>
+            <span><input id="drinkQuantity"  type="number" name="Quantity" value="" placeholder="0"/></span>
+            <span><button id="cartButton" type="button"><span class="fa fa-shopping-cart" ></span>Add to Cart</button></span>
+        </div>
+}
