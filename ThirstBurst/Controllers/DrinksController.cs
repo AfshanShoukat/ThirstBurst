@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +22,9 @@ namespace ThirstBurst.Controllers
         // GET: Drinks
         public async Task<IActionResult> Index()
         {
+            ViewData["VariantsOfDrink"]= await _context.VariantsOfDrink.ToListAsync();
+            ViewData["Variantss"] = await _context.Variants.ToListAsync();
+            var applicationDbContext = _context.Drink.Include(b => b.Drink_Company);
             return View(await _context.Drink.ToListAsync());
         }
 
@@ -50,6 +52,7 @@ namespace ThirstBurst.Controllers
             }
 
             var drink = await _context.Drink
+                .Include(b => b.Drink_Company)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (drink == null)
             {
@@ -63,6 +66,8 @@ namespace ThirstBurst.Controllers
         [Authorize]
         public IActionResult Create()
         {
+            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "CompanyName");
+            ViewData["VariantId"] = new SelectList(_context.Variants, "Id", "Variant_Name");
             return View();
         }
 
@@ -74,14 +79,22 @@ namespace ThirstBurst.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Image_url,CompanyId")] Drink drink)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Image_url,CompanyId")] Drink drink,List<int> Variantss)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(drink);
+                _context.Drink.Add(drink);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                List<VariantsOfDrink> variantsofdrink = new List<VariantsOfDrink>();
+                foreach (int variant in Variantss)
+                {
+                   variantsofdrink.Add(new VariantsOfDrink { VariantId = variant, DrinkId = drink.Id });
+                }
+                _context.VariantsOfDrink.AddRange(variantsofdrink);
+                _context.SaveChanges();
+               return RedirectToAction(nameof(Index));
             }
+            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Id", drink.CompanyId);
             return View(drink);
         }
 
@@ -99,6 +112,17 @@ namespace ThirstBurst.Controllers
             {
                 return NotFound();
             }
+
+            IList<VariantsOfDrink> variantsofdrinks = await _context.VariantsOfDrink.Where<VariantsOfDrink>(a=>a.DrinkId == drink.Id).ToListAsync();
+            IList<int> listVariantss = new List<int>();
+            foreach(VariantsOfDrink variantsofdrink in variantsofdrinks)
+            {
+                listVariantss.Add(variantsofdrink.VariantId);
+            }
+            // var variantss = await _context.Variants.Where(a=>a.Id.Equals(listVariantss)).ToListAsync();
+
+            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "CompanyName",drink.CompanyId);
+            ViewData["VariantId"] = new MultiSelectList(_context.Variants, "Id", "Variant_Name", listVariantss.ToArray());
             return View(drink);
         }
 
@@ -135,6 +159,7 @@ namespace ThirstBurst.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Id", drink.CompanyId);
             return View(drink);
         }
 
@@ -148,6 +173,7 @@ namespace ThirstBurst.Controllers
             }
 
             var drink = await _context.Drink
+                .Include(b => b.Drink_Company)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (drink == null)
             {

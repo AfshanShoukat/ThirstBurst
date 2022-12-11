@@ -28,9 +28,13 @@
                 <span asp-validation-for="Image_url" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CompanyId" class="control-label"></label>
-                <input asp-for="CompanyId" class="form-control" />
-                <span asp-validation-for="CompanyId" class="text-danger"></span>
+                <label asp-for="CompanyId" class="control-label">Company</label>
+               <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
+            </div>
+             <div class="form-group">
+                <label for="Variantss" class="control-label">Variants</label>
+                <select name="Variantss" multiple="multiple" class="form-control" asp-items="ViewBag.VariantId"></select>
+                
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

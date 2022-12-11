@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "DrinkList";
 }
+<div class="row">
 @foreach (var item in Model)
 {      
     <div id="drinkContainer" class="col-lg-3 col-md-4 col-sm-12" >
@@ -13,3 +14,4 @@
             <span><button id="cartButton" type="button"><span class="fa fa-shopping-cart" ></span>Add to Cart</button></span>
         </div>
 }
+</div>

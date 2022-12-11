@@ -19,6 +19,21 @@ namespace ThirstBurst.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DrinkVariants", b =>
+                {
+                    b.Property<int>("DrinksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VariantssId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DrinksId", "VariantssId");
+
+                    b.HasIndex("VariantssId");
+
+                    b.ToTable("DrinkVariants");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -226,7 +241,18 @@ namespace ThirstBurst.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfOrigin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Logo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -261,6 +287,98 @@ namespace ThirstBurst.Data.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Drink");
+                });
+
+            modelBuilder.Entity("ThirstBurst.Models.Orders", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Drink_Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("User_Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("Drink_Id");
+
+                    b.HasIndex("User_Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ThirstBurst.Models.Variants", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Release_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("V_Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Variant_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Variants");
+                });
+
+            modelBuilder.Entity("ThirstBurst.Models.VariantsOfDrink", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DrinkId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VariantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DrinkId");
+
+                    b.HasIndex("VariantId");
+
+                    b.ToTable("VariantsOfDrink");
+                });
+
+            modelBuilder.Entity("DrinkVariants", b =>
+                {
+                    b.HasOne("ThirstBurst.Models.Drink", null)
+                        .WithMany()
+                        .HasForeignKey("DrinksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ThirstBurst.Models.Variants", null)
+                        .WithMany()
+                        .HasForeignKey("VariantssId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -317,12 +435,53 @@ namespace ThirstBurst.Data.Migrations
             modelBuilder.Entity("ThirstBurst.Models.Drink", b =>
                 {
                     b.HasOne("ThirstBurst.Models.Company", "Drink_Company")
-                        .WithMany()
+                        .WithMany("Drinks")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Drink_Company");
+                });
+
+            modelBuilder.Entity("ThirstBurst.Models.Orders", b =>
+                {
+                    b.HasOne("ThirstBurst.Models.Drink", "Drink_ordered")
+                        .WithMany()
+                        .HasForeignKey("Drink_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User_")
+                        .WithMany()
+                        .HasForeignKey("User_Id");
+
+                    b.Navigation("Drink_ordered");
+
+                    b.Navigation("User_");
+                });
+
+            modelBuilder.Entity("ThirstBurst.Models.VariantsOfDrink", b =>
+                {
+                    b.HasOne("ThirstBurst.Models.Drink", "Drinks")
+                        .WithMany()
+                        .HasForeignKey("DrinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ThirstBurst.Models.Variants", "Variantss")
+                        .WithMany()
+                        .HasForeignKey("VariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Drinks");
+
+                    b.Navigation("Variantss");
+                });
+
+            modelBuilder.Entity("ThirstBurst.Models.Company", b =>
+                {
+                    b.Navigation("Drinks");
                 });
 #pragma warning restore 612, 618
         }

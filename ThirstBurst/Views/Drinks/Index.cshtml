@@ -11,22 +11,27 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <p>
-        <a asp-action="Create">Create New</a>
-    </p>
+        <a  asp-action="Create"><button class="btn btn-success"><span class="fa fa-plus-square"></span>Create New</button></a>
+</p>
 }
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+               @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => model.Image_url)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image_url)
+             <th>
+                @Html.DisplayNameFor(model => model.Drink_Company)
             </th>
-            <th></th>
+            <th>
+                Variants
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -36,11 +41,30 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+               <img style="width:250px;height:300px;" src="@item.Image_url" alt="@item.Name" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image_url)
+                @Html.DisplayFor(modelItem => item.Price)
             </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.Drink_Company.CompanyName)
+            </td>
+            <td>
+                @foreach(var variants in ViewData["Variantss"] as List<Variants>)
+                    {
+                        foreach (var variantsofdrink in ViewData["VariantsofDrink"] as List<VariantsOfDrink>)
+                        {
+                            if (variants.Id == variantsofdrink.VariantId && item.Id == variantsofdrink.DrinkId)
+                            {
+                                <div id="variantBox">
+                                    <span id="variantName">@variants.Variant_Name</span>
+                                    <img id="variantImage" src="@variants.V_Image" alt="@variants.Variant_Name" />
+                                </div>
+                            }
+                        }
+                    }
+                </td>
+
             @if (SignInManager.IsSignedIn(User))
 {
             <td>

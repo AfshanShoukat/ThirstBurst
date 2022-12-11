@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ThirstBurst.Models
@@ -16,6 +17,8 @@ namespace ThirstBurst.Models
         [ForeignKey("Drink_Company")]
         public int CompanyId { get; set; }
         public virtual Company Drink_Company { get; set; }
+        public List<Variants> Variantss { get; set; }
+
 
     }
 }
