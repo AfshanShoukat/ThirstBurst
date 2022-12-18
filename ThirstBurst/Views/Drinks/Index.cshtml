@@ -1,6 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
 @model IEnumerable<ThirstBurst.Models.Drink>
 
 @{
@@ -8,12 +6,11 @@
 }
 
 <h1>Index</h1>
-@if (SignInManager.IsSignedIn(User))
-{
+
     <p>
         <a  asp-action="Create"><button class="btn btn-success"><span class="fa fa-plus-square"></span>Create New</button></a>
 </p>
-}
+
 <table class="table">
     <thead>
         <tr>
@@ -27,10 +24,13 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
              <th>
-                @Html.DisplayNameFor(model => model.Drink_Company)
+                @Html.DisplayNameFor(model => model.Drink_Company.CompanyName)
             </th>
             <th>
                 Variants
+            </th>
+            <th>
+
             </th>
         </tr>
     </thead>
@@ -41,7 +41,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-               <img style="width:250px;height:300px;" src="@item.Image_url" alt="@item.Name" />
+               <img class="img-thumbnail" style="width:200px;height:250px;" src="@item.Image_url" alt="@item.Name" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
@@ -63,16 +63,13 @@
                             }
                         }
                     }
-                </td>
-
-            @if (SignInManager.IsSignedIn(User))
-{
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
-}
+
+           
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id"><span style="color: green;" class="fa fa-edit"></span></a> |
+                <a asp-action="Delete" asp-route-id="@item.Id"><span style="color:red;" class="fa fa-trash"></span></a>
+            </td>
         </tr>
 }
     </tbody>

@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.CompanyName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Logo)
+               <img style="width:100px;height:100px;border-radius:50%;" src="@Html.DisplayFor(modelItem => item.Logo)" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateOfOrigin)
@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id"><span style="color: green;" class="fa fa-edit"></a> |
+                <a asp-action="Details" asp-route-id="@item.Id"><span style="color:red;" class="fa fa-info"></a> |
+                <a asp-action="Delete" asp-route-id="@item.Id"><span style="color:red;" class="fa fa-trash"></a>
             </td>
         </tr>
 }

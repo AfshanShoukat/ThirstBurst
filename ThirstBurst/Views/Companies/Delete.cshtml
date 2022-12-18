@@ -4,7 +4,10 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+@{List<Drink> drinks = ViewData["Drinks"] as List<Drink>; }
+
+@if (drinks.Count() == 0)
+{
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
@@ -21,7 +24,7 @@
             @Html.DisplayNameFor(model => model.Logo)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Logo)
+            <img  style="width:100px;height:100px;border-radius:50%;" src="@Html.DisplayFor(model => model.Logo)" />
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateOfOrigin)
@@ -43,3 +46,30 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+}
+else
+{
+    <h5 class="bg-warning" style="padding:5px; text-align:center;">Sorry! We cannot delete this Company because it is registered as a Company of Drink(s)</h5>
+    <table style="text-align:center;">
+        <thead>
+            <tr>
+                <th>Drink Name</th>
+                <th>Drink Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var drink in drinks)
+            {
+                    if (drink.CompanyId == Model.Id)
+                    {
+                        <tr>
+                            <td style="width:200px;">@drink.Name</td>
+                            <td><img style="width:200px;" src="@drink.Image_url" alt="@drink.Name" /></td>
+                        </tr>
+                    }
+                
+            }
+        </tbody>
+    </table>
+    <h5 class="bg-primary" style="padding:5px; text-align:center;">Please delete/update these drinks before deletion of Company.</h5>
+}

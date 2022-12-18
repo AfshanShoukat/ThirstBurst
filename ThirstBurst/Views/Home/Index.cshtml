@@ -1,8 +1,23 @@
-﻿@{
+﻿@model IEnumerable<ThirstBurst.Models.Drink>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h2 class="display-4"><b>Thirst Burst</b></h2>
+    <h5><i>Online Drink Store</i></h5>
+</div>
+<div class="row">
+@foreach (var item in Model)
+{      
+    <div id="drinkContainer" class="col-lg-3 col-md-4 col-sm-12" >
+        <a asp-controller="Drinks" asp-action="DrinkDetails" asp-route-id="@item.Id">
+            <img id="drinkImage" class="img-thumbnail" src="@item.Image_url" alt="@item.Name" />
+            <span id="drinkTitle" >@item.Name</span>
+       </a>
+            <span id="drinkPrice">Rs. @item.Price</span>
+            <span><input id="drinkQuantity"  type="number" name="Quantity" value="" placeholder="0"/></span>
+            <span><button id="cartButton" type="button"><span class="fa fa-shopping-cart" ></span>Cart</button></span>
+        </div>
+}
 </div>

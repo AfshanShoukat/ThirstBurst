@@ -130,6 +130,12 @@ namespace ThirstBurst.Controllers
             {
                 return NotFound();
             }
+            List<VariantsOfDrink> drinkVariantss = await _context.VariantsOfDrink.Where<VariantsOfDrink>(a => a.VariantId == variants.Id).ToListAsync();
+            List<Drink> drinks = await _context.Drink.ToListAsync();
+
+
+            ViewData["drinks"] = drinks;
+            ViewData["drinkVariantss"] = drinkVariantss;
 
             return View(variants);
         }

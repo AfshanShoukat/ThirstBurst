@@ -58,7 +58,11 @@ for details on configuring this project to bundle and minify static web assets. 
   text-align: center;
   word-break: break-all;
 }
-
+.nav-item:hover {
+    background-color: lightgreen;
+    border-radius: 1em;
+    font-weight: bold;
+}
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;

@@ -130,6 +130,7 @@ namespace ThirstBurst.Controllers
             {
                 return NotFound();
             }
+            ViewData["Drinks"] = await _context.Drink.Where<Drink>(a => a.CompanyId == id).ToListAsync();
 
             return View(company);
         }

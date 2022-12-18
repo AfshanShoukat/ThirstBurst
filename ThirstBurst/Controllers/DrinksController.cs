@@ -28,42 +28,33 @@ namespace ThirstBurst.Controllers
             return View(await _context.Drink.ToListAsync());
         }
 
-        public async Task<IActionResult> DrinkList()
-        {
-            return View(await _context.Drink.ToListAsync());
-        }
-
         public IActionResult SearchDrink()
         {
             return View();
         }
         public async Task<IActionResult> Result(string Name)
         {
+            ViewData["VariantsOfDrink"] = await _context.VariantsOfDrink.ToListAsync();
+            ViewData["Variantss"] = await _context.Variants.ToListAsync();
+            var applicationDbContext = _context.Drink.Include(b => b.Drink_Company);
             return View("Index", await _context.Drink.Where(a => a.Name.Contains(Name)).ToListAsync());
         }
-
-
-        // GET: Drinks/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> DrinkDetails (int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
+            ViewData["VariantsOfDrink"] = await _context.VariantsOfDrink.ToListAsync();
+            ViewData["Variantss"] = await _context.Variants.ToListAsync();
+            var applicationDbContext = _context.Drink.Include(b => b.Drink_Company);
+            return View("Index", await _context.Drink.Where(a => a.Id == id).ToListAsync());
 
-            var drink = await _context.Drink
-                .Include(b => b.Drink_Company)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (drink == null)
-            {
-                return NotFound();
-            }
-
-            return View(drink);
         }
 
         // GET: Drinks/Create
-        [Authorize]
+       
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "CompanyName");
@@ -78,7 +69,6 @@ namespace ThirstBurst.Controllers
         [ValidateAntiForgeryToken]
 
 
-        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Name,Price,Image_url,CompanyId")] Drink drink,List<int> Variantss)
         {
             if (ModelState.IsValid)
@@ -99,7 +89,7 @@ namespace ThirstBurst.Controllers
         }
 
         // GET: Drinks/Edit/5
-        [Authorize]
+ 
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -131,9 +121,10 @@ namespace ThirstBurst.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Image_url,CompanyId")] Drink drink)
+      
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Image_url,CompanyId")] Drink drink, List<int> Variantss)
         {
+            var transaction = _context.Database.BeginTransaction();
             if (id != drink.Id)
             {
                 return NotFound();
@@ -144,7 +135,20 @@ namespace ThirstBurst.Controllers
                 try
                 {
                     _context.Update(drink);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
+                    List<VariantsOfDrink> variantsofdrink = new List<VariantsOfDrink>();
+                    foreach (int variant in Variantss)
+                    {
+                        variantsofdrink.Add(new VariantsOfDrink { VariantId = variant, DrinkId = drink.Id });
+                    }
+                    List<VariantsOfDrink> deleteVariantsofDrink = await _context.VariantsOfDrink.Where<VariantsOfDrink>(a => a.DrinkId == drink.Id).ToListAsync();
+                    _context.VariantsOfDrink.RemoveRange(deleteVariantsofDrink);
+                    _context.SaveChanges();
+
+                    _context.VariantsOfDrink.UpdateRange(variantsofdrink);
+                    _context.SaveChanges();
+
+                    await transaction.CommitAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -164,7 +168,7 @@ namespace ThirstBurst.Controllers
         }
 
         // GET: Drinks/Delete/5
-        [Authorize]
+       
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -186,12 +190,18 @@ namespace ThirstBurst.Controllers
         // POST: Drinks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
+       
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var drink = await _context.Drink.FindAsync(id);
             _context.Drink.Remove(drink);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
+
+            List<VariantsOfDrink> deleteVariantsOfDrink = await _context.VariantsOfDrink.Where<VariantsOfDrink>(a => a.DrinkId == drink.Id).ToListAsync();
+            _context.VariantsOfDrink.RemoveRange(deleteVariantsOfDrink);
+            _context.SaveChanges();
+
+
             return RedirectToAction(nameof(Index));
         }
 
