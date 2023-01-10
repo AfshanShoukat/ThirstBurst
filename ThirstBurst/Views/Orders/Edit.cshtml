@@ -1,0 +1,64 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model ThirstBurst.Models.Orders
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Orders</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="OrderId" />
+             <div class="form-group">
+                <label asp-for="Drink_Id" class="control-label">Drink</label>
+                <select asp-for="Drink_Id" class="form-control" asp-items="ViewBag.Drink_Id"></select>
+                <span asp-validation-for="Drink_Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="form-group">
+                    <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList<OrderState>()"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            }
+            <div class="form-group">
+
+                <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList<OrderState>()" hidden></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="LastUpdated" class="form-control" hidden/>
+                <span asp-validation-for="LastUpdated" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <select asp-for="User_Id" class="form-control" asp-items="ViewBag.User_Id" hidden></select>
+                <span asp-validation-for="User_Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
