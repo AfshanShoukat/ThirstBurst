@@ -20,7 +20,20 @@ for details on configuring this project to bundle and minify static web assets. 
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 20px;
 }
+#quantityInput {
+    border: none;
+    width: 100%;
+    text-align: center;
+}
 
+    #quantityInput:focus {
+        border: none;
+        width: 100%;
+        text-align: center;
+        background-color: lightgreen;
+        -webkit-appearance: none;
+        margin: 0;
+    }
 #drinkPrice {
     display: block;
     text-align: center;
@@ -40,6 +53,22 @@ for details on configuring this project to bundle and minify static web assets. 
     border-bottom-style: dotted;
     border-right: hidden;
     border-left: hidden;
+}
+
+#DrinkQuantity {
+    width: 45%;
+    margin-left: 5%;
+    border-top: 2px dotted grey;
+    border-bottom: 2px dotted grey;
+    display: inline-block;
+}
+
+#drinkCartButton {
+    width: 45%;
+    display: inline-block;
+    border: none;
+    border-top: 2px dotted grey;
+    border-bottom: 2px dotted grey;
 }
 
 #cartButton {

@@ -24,7 +24,8 @@ namespace ThirstBurst.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Drink.ToListAsync());
+            ViewData["Drinks"] = await _context.Drink.ToListAsync<Drink>();
+            return View();
         }
 
         public IActionResult Privacy()

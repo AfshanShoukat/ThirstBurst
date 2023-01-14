@@ -12,7 +12,7 @@ namespace ThirstBurst.Models
         [Required]
         public int Quantity { get; set; }
         [Required]
-        public string Status { get; set; }
+        public OrderState Status { get; set; }
         [Required]
         public DateTime LastUpdated { get; set; }
         [ForeignKey("Drink_ordered")]
@@ -23,4 +23,13 @@ namespace ThirstBurst.Models
         public string User_Id { get; set; }
         public virtual IdentityUser User_ { get; set; }
     }
+}
+
+public enum OrderState
+{
+    InCart,
+    OrderPlaced,
+    Verifying,
+    Inprocess,
+    Delivered
 }

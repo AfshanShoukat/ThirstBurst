@@ -1,10 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject ThirstBurst.Data.ApplicationDbContext _context
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+    <li class="nav-item">
+   <a asp-controller="Orders" asp-action="Index" class="nav-link text-dark">
+   <span class="fa fa-shopping-cart"></span>
+    Cart
+  @if (!User.IsInRole("Admin")){
+   <span style="padding:4px; border-radius:2em; background-color:red; font-weight:bold; color:white;">@_context.Orders.Where(a => a.User_Id == UserManager.GetUserId(User)).Where(a=>a.Status==OrderState.InCart).Count()</span>}</a>      </li>
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
     </li>

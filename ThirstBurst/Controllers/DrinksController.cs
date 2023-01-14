@@ -54,7 +54,7 @@ namespace ThirstBurst.Controllers
         }
 
         // GET: Drinks/Create
-       
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "CompanyName");
@@ -67,7 +67,7 @@ namespace ThirstBurst.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Create([Bind("Id,Name,Price,Image_url,CompanyId")] Drink drink,List<int> Variantss)
         {
@@ -89,7 +89,7 @@ namespace ThirstBurst.Controllers
         }
 
         // GET: Drinks/Edit/5
- 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -121,7 +121,7 @@ namespace ThirstBurst.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-      
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Image_url,CompanyId")] Drink drink, List<int> Variantss)
         {
             var transaction = _context.Database.BeginTransaction();
@@ -168,7 +168,7 @@ namespace ThirstBurst.Controllers
         }
 
         // GET: Drinks/Delete/5
-       
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -190,7 +190,7 @@ namespace ThirstBurst.Controllers
         // POST: Drinks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-       
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var drink = await _context.Drink.FindAsync(id);
