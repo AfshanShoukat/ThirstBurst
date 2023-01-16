@@ -4,7 +4,9 @@
     ViewData["Title"] = "Delete";
 }
 
-@{List<Drink> drinks = ViewData["Drinks"] as List<Drink>; }
+@{
+    List<Drink> drinks = ViewData["Drinks"] as List<Drink>;
+}
 
 @if (drinks.Count() == 0)
 {
